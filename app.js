@@ -6,10 +6,11 @@ const mongoSanitize = require("express-mongo-sanitize");
 const hpp = require("hpp");
 const app = express();
 
+const AppError = require("./appError");
 const tourRouter = require("./routes/tourRoutes");
 const globalErrorHandler = require("./controllers/errorController");
 const userRouter = require("./routes/userRoutes");
-const AppError = require("./appError");
+const reviewRouter = require("./routes/reviewRoutes");
 
 // Creating a middleWare
 app.use(helmet());
@@ -53,6 +54,7 @@ app.use((req, res, next) => {
 // Mounting routes
 app.use("/api/v1/tours", tourRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/reviews", reviewRouter);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
