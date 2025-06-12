@@ -1,6 +1,6 @@
 const User = require("./../models/userModel");
 const catchAsync = require("./../utils/catchAsync");
-const AppError = require("./../appError");
+const AppError = require("../../appError");
 const factory = require("./handlerFactory");
 
 const filterObj = (obj, ...allowedFields) => {
@@ -11,10 +11,10 @@ const filterObj = (obj, ...allowedFields) => {
   return newObj;
 };
 
-exports.getMe = (req, res, next)  => {
+exports.getMe = (req, res, next) => {
   req.params.id = req.user.id;
   next();
-}
+};
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   // Create error if user POSTs password data
@@ -50,12 +50,10 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
 });
 
 exports.createUser = (req, res) => {
-  res
-    .status(500)
-    .json({
-      status: "error",
-      message: "The route is not defined. Use /signup instead!",
-    });
+  res.status(500).json({
+    status: "error",
+    message: "The route is not defined. Use /signup instead!",
+  });
 };
 
 exports.getAllUsers = factory.getAll(User);
