@@ -3,8 +3,8 @@ const crypto = require("crypto");
 const { promisify } = require("util");
 const catchAsync = require("../utils/catchAsync");
 const User = require("./../models/userModel");
-const AppError = require("./../appError");
-const { sendEmail } = require("./../utils/email");
+const AppError = require("../utils/appError");
+const { sendEmail } = require("../utils/email");
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -23,7 +23,7 @@ const createSendToken = (user, statusCode, res) => {
     secure: true,
     sameSite: "none",
   });
-  
+
   user.password = undefined;
 
   res.status(statusCode).json({

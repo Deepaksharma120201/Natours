@@ -1,10 +1,19 @@
-import logoGreen from "../assets/img/logo-green.png";
+import logoGreen from "/img/logo-green-small.png";
 
 function Footer() {
   return (
     <div className="footer">
       <div className="footer__logo">
-        <img src={logoGreen} alt="Natours logo" />
+        <img src={logoGreen} alt="Wildway logo" />
+        <span
+          style={{
+            color: "#28b487",
+            fontSize: "3rem",
+            marginLeft: "0.5rem",
+          }}
+        >
+          WildWay
+        </span>
       </div>
       <ul className="footer__nav">
         <li>
@@ -24,7 +33,7 @@ function Footer() {
         </li>
       </ul>
       <p className="footer__copyright">
-        &copy; by Jonas Schmedtmann. All rights reserved.
+        &copy; by The Boogyman. All rights reserved.
       </p>
     </div>
   );

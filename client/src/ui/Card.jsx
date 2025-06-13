@@ -1,34 +1,46 @@
-import icons from "../assets/img/icons.svg";
+import { Link } from "react-router-dom";
+import icons from "/img/icons.svg";
 
-function Card({
-  title,
-  subtitle,
-  description,
-  location,
-  date,
-  stops,
-  people,
-  price,
-  rating,
-  reviews,
-  image,
-  link,
-}) {
+function Card({ tour }) {
+  const {
+    name,
+    duration,
+    summary,
+    startLocation,
+    startDates,
+    locations,
+    maxGroupSize,
+    price,
+    ratingsAverage,
+    ratingsQuantity,
+    imageCover,
+    slug,
+  } = tour;
+
+  const subtitle = `${duration}-day tour`;
+  const location = startLocation?.description || "Unknown";
+  const date = startDates?.[0]
+    ? new Date(startDates[0]).toLocaleDateString()
+    : "TBD";
+  const stops = locations?.length || 0;
+  const image = `/img/tours/${imageCover}`;
+  const link = `/tour/${slug}`;
+
   return (
     <div className="card">
       <div className="card__header">
         <div className="card__picture">
           <div className="card__picture-overlay">&nbsp;</div>
-          <img src={image} alt={title} className="card__picture-img" />
+          <img src={image} alt={name} className="card__picture-img" />
         </div>
         <h3 className="heading-tertirary">
-          <span>{title}</span>
+          <span>{name}</span>
         </h3>
       </div>
 
       <div className="card__details">
         <h4 className="card__sub-heading">{subtitle}</h4>
-        <p className="card__text">{description}</p>
+        <p className="card__text">{summary}</p>
         <div className="card__data">
           <svg className="card__icon">
             <use xlinkHref={`${icons}#icon-map-pin`} />
@@ -51,22 +63,22 @@ function Card({
           <svg className="card__icon">
             <use xlinkHref={`${icons}#icon-user`} />
           </svg>
-          <span>{people} people</span>
+          <span>{maxGroupSize} people</span>
         </div>
       </div>
 
       <div className="card__footer">
         <p>
           <span className="card__footer-value">${price}</span>
-          <span className="card__footer-text">per person</span>
+          <span className="card__footer-text"> per person</span>
         </p>
         <p className="card__ratings">
-          <span className="card__footer-value">{rating}</span>
-          <span className="card__footer-text">rating ({reviews})</span>
+          <span className="card__footer-value">{ratingsAverage}</span>
+          <span className="card__footer-text"> rating ({ratingsQuantity})</span>
         </p>
-        <a href={link} className="btn btn--green btn--small">
+        <Link to={link} className="btn btn--green btn--small">
           Details
-        </a>
+        </Link>
       </div>
     </div>
   );

@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
-// const User = required("./userModel");
-// const validator = require("validator");
 
 const tourSchema = new mongoose.Schema(
   {
@@ -12,7 +10,6 @@ const tourSchema = new mongoose.Schema(
       trim: true,
       maxLength: [40, "A Tour must have less than or equal to 40 characters."],
       minLength: [10, "A Tour must have less than or equal to 10 characters."],
-      // validate: [validator.isAlpha, , "Tour name must only contain alphabates"],
     },
     slug: String,
 
@@ -146,17 +143,6 @@ tourSchema.pre("/^find/", function (next) {
 
   next();
 });
-
-// tourSchema.pre("save", async function (next) {
-//   const guidesPromises = this.guides.map(async (id) => await User.findById(id));
-//   await Promise.all(guidesPromises)
-//   next();
-// });
-
-// tourSchema.post("save", function (doc, next) {
-//   console.log(doc);
-//   next();
-// });
 
 const Tour = mongoose.model("Tour", tourSchema);
 module.exports = Tour;

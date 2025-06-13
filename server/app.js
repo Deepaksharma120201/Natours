@@ -1,3 +1,5 @@
+const path = require("path");
+const cors = require("cors");
 const express = require("express");
 const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
@@ -6,13 +8,16 @@ const mongoSanitize = require("express-mongo-sanitize");
 const hpp = require("hpp");
 const app = express();
 
-const AppError = require("./appError");
+const AppError = require("./utils/appError");
 const tourRouter = require("./routes/tourRoutes");
+const mainRouter = require("./routes/mainRoutes");
 const globalErrorHandler = require("./controllers/errorController");
 const userRouter = require("./routes/userRoutes");
 const reviewRouter = require("./routes/reviewRoutes");
 
 // Creating a middleWare
+app.use(express.static(path.join(__dirname, "public"))); // to serve static files
+
 app.use(helmet());
 app.use(morgan("dev"));
 
@@ -43,15 +48,17 @@ app.use(
   })
 );
 
-app.use(express.static(`${__dirname}/public`)); // to serve static files
-
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   // console.log(req.headers);
   next();
 });
 
+// CORS
+app.use(cors());
+
 // Mounting routes
+app.use("/", mainRouter);
 app.use("/api/v1/tours", tourRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/reviews", reviewRouter);
