@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import { Toaster } from "react-hot-toast";
 import Overview from "./pages/Overview";
 import TourDetails from "./pages/TourDetails";
 import Login from "./pages/Login";
@@ -6,16 +8,37 @@ import MainLayout from "./ui/Layout";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<Overview />} />
-          <Route path="/tour/:slug" element={<TourDetails />} />
-        </Route>
-
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<Overview />} />
+            <Route path="/tour/:slug" element={<TourDetails />} />
+            <Route path="/login" element={<Login />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+      <Toaster
+        position="top-center"
+        gutter={12}
+        containerStyle={{ margin: "8px" }}
+        toastOptions={{
+          success: {
+            duration: 3000,
+          },
+          error: {
+            duration: 5000,
+          },
+          style: {
+            fontSize: "16px",
+            maxWidth: "500px",
+            padding: "16px 24px",
+            backgroundColor: "#fff",
+            color: "#374151",
+          },
+        }}
+      />
+    </AuthProvider>
   );
 }
 

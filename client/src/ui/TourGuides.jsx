@@ -1,6 +1,4 @@
 function TourGuides({ guides }) {
-  console.log(guides);
-
   return (
     <div className="overview-box__group">
       <h2 className="heading-secondary ma-bt-lg">Your tour guides</h2>

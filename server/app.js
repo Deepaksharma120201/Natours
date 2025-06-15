@@ -1,5 +1,6 @@
 const path = require("path");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const express = require("express");
 const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
@@ -14,6 +15,14 @@ const mainRouter = require("./routes/mainRoutes");
 const globalErrorHandler = require("./controllers/errorController");
 const userRouter = require("./routes/userRoutes");
 const reviewRouter = require("./routes/reviewRoutes");
+
+// CORS
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 // Creating a middleWare
 app.use(express.static(path.join(__dirname, "public"))); // to serve static files
@@ -30,6 +39,7 @@ const limiter = rateLimit({
 app.use("/api", limiter);
 
 app.use(express.json({ limit: "10kb" })); // to parse JSON data
+app.use(cookieParser());
 
 // For security purposes
 // Data sanitization against NoSQL query injection
@@ -50,12 +60,9 @@ app.use(
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
-  // console.log(req.headers);
+  // console.log(req.cookies);
   next();
 });
-
-// CORS
-app.use(cors());
 
 // Mounting routes
 app.use("/", mainRouter);

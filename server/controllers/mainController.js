@@ -19,12 +19,16 @@ exports.getOverview = catchAsync(async (req, res, next) => {
 exports.getTour = catchAsync(async (req, res, next) => {
   const tour = await Tour.findOne({ slug: req.params.slug }).populate([
     {
-      path: "reviews",
-      fields: "review rating user",
-    },
-    {
       path: "guides",
       select: "name role photo",
+    },
+    {
+      path: "reviews",
+      select: "review rating user createdAt",
+      populate: {
+        path: "user",
+        select: "name photo",
+      },
     },
   ]);
 
@@ -41,7 +45,43 @@ exports.getTour = catchAsync(async (req, res, next) => {
 });
 
 // GET /api/v1/users/me
-exports.getAccount = (req, res) => {
+exports.getMe = (req, res, next) => {
+  if (!req.cookies.jwt) {
+    return res.status(401).json({ status: "fail", message: "Not logged in" });
+  }
+
+  jwt.verify(req.cookies.jwt, process.env.JWT_SECRET, async (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ status: "fail", message: "Invalid token" });
+    }
+
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res
+        .status(401)
+        .json({ status: "fail", message: "User not found" });
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: { user },
+    });
+  });
+};
+
+exports.logout = (req, res) => {
+  console.log("Logging out...");
+  res.cookie("jwt", "loggedout", {
+    httpOnly: true,
+    secure: false,
+    sameSite: "Lax",
+    expires: new Date(Date.now() + 10 * 1000),
+  });
+
+  res.status(200).json({ status: "success" });
+};
+
+exports.getCurrentUser = (req, res, next) => {
   res.status(200).json({
     status: "success",
     data: {

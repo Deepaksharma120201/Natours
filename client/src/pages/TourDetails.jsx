@@ -17,7 +17,11 @@ function TourDetails() {
   useEffect(() => {
     const fetchTour = async () => {
       try {
-        const res = await fetch(`http://127.0.0.1:3000/tour/${slug}`);
+        const res = await fetch(`http://localhost:3000/tour/${slug}`, {
+          method: "GET",
+          credentials: "include",
+        });
+
         const data = await res.json();
         const tour = data?.data?.tour ?? [];
         setTour(tour);
@@ -57,7 +61,11 @@ function TourDetails() {
       </section>
       <TourGallery images={tour.images} />
       <TourReviews reviews={tour.reviews} />
-      <CTASection image1="/img/tour-5-2.jpg" image2="/img/tour-5-1.jpg" />
+      <CTASection
+        image1={tour.images[0]}
+        image2={tour.images[1]}
+        duration={tour.duration}
+      />
     </>
   );
 }

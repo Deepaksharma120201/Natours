@@ -4,15 +4,20 @@ function TourReviews({ reviews }) {
   return (
     <section className="section-reviews">
       <div className="reviews">
-        {reviews.map((review, idx) => (
-          <ReviewCard
-            key={idx}
-            user={review.user}
-            text={review.text}
-            rating={review.rating}
-            photo={review.photo}
-          />
-        ))}
+        {reviews.map(
+          (review, idx) => (
+            console.log(review),
+            (
+              <ReviewCard
+                key={idx}
+                text={review.review}
+                rating={review.rating}
+                user={review.user.name}
+                photo={review.user.photo}
+              />
+            )
+          )
+        )}
       </div>
     </section>
   );
