@@ -6,7 +6,6 @@ const router = express.Router();
 
 router.get("/", mainController.getOverview);
 router.get("/tour/:slug", mainController.getTour);
-router.get("/me", mainController.getMe);
 router.get(
   "/currentUser",
   authController.protect,

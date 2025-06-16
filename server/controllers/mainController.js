@@ -44,31 +44,6 @@ exports.getTour = catchAsync(async (req, res, next) => {
   });
 });
 
-// GET /api/v1/users/me
-exports.getMe = (req, res, next) => {
-  if (!req.cookies.jwt) {
-    return res.status(401).json({ status: "fail", message: "Not logged in" });
-  }
-
-  jwt.verify(req.cookies.jwt, process.env.JWT_SECRET, async (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ status: "fail", message: "Invalid token" });
-    }
-
-    const user = await User.findById(decoded.id);
-    if (!user) {
-      return res
-        .status(401)
-        .json({ status: "fail", message: "User not found" });
-    }
-
-    res.status(200).json({
-      status: "success",
-      data: { user },
-    });
-  });
-};
-
 exports.logout = (req, res) => {
   console.log("Logging out...");
   res.cookie("jwt", "loggedout", {

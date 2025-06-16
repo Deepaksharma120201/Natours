@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import TourHero from "../ui/TourHero";
 import QuickFacts from "../ui/QuickFacts";
@@ -12,6 +12,7 @@ import CTASection from "../ui/CTASection";
 
 function TourDetails() {
   const { slug } = useParams();
+  const navigate = useNavigate();
   const [tour, setTour] = useState(null);
 
   useEffect(() => {
@@ -22,6 +23,22 @@ function TourDetails() {
           credentials: "include",
         });
 
+        if (res.status === 404) {
+          const errorData = await res.json();
+          navigate("/not-found", {
+            state: { message: errorData.message || "Page not found!" },
+          });
+          return;
+        }
+
+        if (!res.ok) {
+          const errorData = await res.json();
+          navigate("/not-found", {
+            state: { message: errorData.message || "Something went wrong." },
+          });
+          return;
+        }
+
         const data = await res.json();
         const tour = data?.data?.tour ?? [];
         setTour(tour);
@@ -30,7 +47,7 @@ function TourDetails() {
       }
     };
     fetchTour();
-  }, [slug]);
+  }, [navigate, slug]);
 
   if (!tour) return <p>Loading tour details...</p>;
 

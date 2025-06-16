@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../services/authServices";
+import { fetchCurrentUser, loginUser } from "../services/authServices";
 import { useAuth } from "../context/AuthContext";
 
 function Login() {
@@ -15,11 +15,8 @@ function Login() {
 
     try {
       await loginUser({ email, password });
-      const res = await fetch("http://localhost:3000/currentUser", {
-        credentials: "include",
-      });
-      const data = await res.json();
-      setUser(data.data.user);
+      const user = await fetchCurrentUser();
+      setUser(user);
       toast.success("Logged in successfully!");
       navigate("/");
     } catch (err) {

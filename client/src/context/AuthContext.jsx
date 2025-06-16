@@ -13,9 +13,9 @@ export function AuthProvider({ children }) {
           credentials: "include",
         });
 
-        if (!res.ok) throw new Error("Not logged in");
-
         const data = await res.json();
+        if (!res.ok) throw new Error("User Not logged in");
+
         setUser(data.data.user);
       } catch {
         setUser(null);

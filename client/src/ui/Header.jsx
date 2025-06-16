@@ -11,15 +11,15 @@ function Header() {
 
   const handleLogout = async () => {
     try {
-      const data = await logoutUser();
-      setUser(null);
-      console.log(data);
-      toast.success("Logged out successfully!");
+      await logoutUser();
       navigate("/");
+      setUser(null);
+      toast.success("Logged out successfully!");
     } catch (err) {
       toast.error(err.message);
     }
   };
+
   return (
     <header className="header">
       <nav className="nav nav--tours">
@@ -48,21 +48,21 @@ function Header() {
             <button className="nav__el nav__el--logout" onClick={handleLogout}>
               Log out
             </button>
-            <a href="#" className="nav__el">
+            <Link to="/me" className="nav__el">
               <img
                 src={`/img/users/${user.photo}`}
                 alt="User photo"
                 className="nav__user-img"
               />
               <span>{user.name.split(" ")[0]}</span>
-            </a>
+            </Link>
           </>
         ) : (
           <>
             <Link className="nav__el" to="/login">
               Log in
             </Link>
-            <Link className="nav__el nav__el--cta" to="/">
+            <Link className="nav__el nav__el--cta" to="/signup">
               Sign up
             </Link>
           </>
