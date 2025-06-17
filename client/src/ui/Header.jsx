@@ -1,12 +1,14 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { logoutUser } from "../services/authServices";
+import { useSearch } from "../context/SearchContext";
 import logoWhite from "/img/logo-white.png";
 import icons from "/img/icons.svg";
-import { logoutUser } from "../services/authServices";
 import toast from "react-hot-toast";
 
 function Header() {
   const { user, setUser } = useAuth();
+  const { searchTerm, setSearchTerm } = useSearch();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -26,7 +28,7 @@ function Header() {
         <a href="/" className="nav__el">
           All tours
         </a>
-        <form className="nav__search">
+        <form className="nav__search" onSubmit={(e) => e.preventDefault()}>
           <button className="nav__search-btn">
             <svg>
               <use xlinkHref={`${icons}#icon-search`} />
@@ -36,6 +38,8 @@ function Header() {
             type="text"
             placeholder="Search tours"
             className="nav__search-input"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </form>
       </nav>

@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { SearchProvider } from "./context/SearchContext";
 import { AuthProvider } from "./context/AuthContext";
 import { Toaster } from "react-hot-toast";
 import Overview from "./pages/Overview";
@@ -14,18 +15,20 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Routes>
-          <Route element={<MainLayout />}>
-            <Route path="/" element={<Overview />} />
-            <Route path="/tour/:slug" element={<TourDetails />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/me" element={<UserAccount />} />
-            <Route path="/my-bookings" element={<MyBookings />} />
-            <Route path="/not-found" element={<PageNotFound />} />
-            <Route path="*" element={<PageNotFound />} />
-          </Route>
-        </Routes>
+        <SearchProvider>
+          <Routes>
+            <Route element={<MainLayout />}>
+              <Route path="/" element={<Overview />} />
+              <Route path="/tour/:slug" element={<TourDetails />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/me" element={<UserAccount />} />
+              <Route path="/my-bookings" element={<MyBookings />} />
+              <Route path="/not-found" element={<PageNotFound />} />
+              <Route path="*" element={<PageNotFound />} />
+            </Route>
+          </Routes>
+        </SearchProvider>
       </BrowserRouter>
       <Toaster
         position="top-center"

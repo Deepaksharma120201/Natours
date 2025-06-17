@@ -26,3 +26,4 @@ dist-ssr
 server/dev-data/
 server/.env
 client/.env
+client/src/style.css
