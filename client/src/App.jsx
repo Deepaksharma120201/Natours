@@ -8,6 +8,7 @@ import PageNotFound from "./pages/PageNotFound";
 import MainLayout from "./ui/Layout";
 import UserAccount from "./pages/UserAccount";
 import Signup from "./pages/Signup";
+import MyBookings from "./pages/MyBookings";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/me" element={<UserAccount />} />
+            <Route path="/my-bookings" element={<MyBookings />} />
             <Route path="/not-found" element={<PageNotFound />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>

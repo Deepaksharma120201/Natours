@@ -1,12 +1,14 @@
+import { Link } from "react-router-dom";
+
 function SidebarItem({ href, icon, label, active = false }) {
   return (
     <li className={active ? "side-nav--active" : ""}>
-      <a href={href}>
+      <Link to={href}>
         <svg>
           <use xlinkHref={`img/icons.svg#${icon}`} />
         </svg>
         {label}
-      </a>
+      </Link>
     </li>
   );
 }

@@ -5,7 +5,11 @@ function SidebarNav({ user }) {
     <nav className="user-view__menu">
       <ul className="side-nav">
         <SidebarItem href="#" icon="icon-settings" label="Settings" active />
-        <SidebarItem href="#" icon="icon-briefcase" label="My bookings" />
+        <SidebarItem
+          href="/my-bookings"
+          icon="icon-briefcase"
+          label="My bookings"
+        />
         <SidebarItem href="#" icon="icon-star" label="My reviews" />
         <SidebarItem href="#" icon="icon-credit-card" label="Billing" />
       </ul>

@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.get("/", mainController.getOverview);
 router.get("/tour/:slug", mainController.getTour);
+router.get("/my-bookings", mainController.getMyTours);
 router.get(
   "/currentUser",
   authController.protect,

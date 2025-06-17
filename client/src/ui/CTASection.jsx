@@ -1,4 +1,14 @@
-function CTASection({ image1, image2, duration }) {
+import { useAuth } from "../context/AuthContext";
+import { Link } from "react-router-dom";
+import { bookTour } from "../services/payment";
+
+function CTASection({ image1, image2, duration, tourId }) {
+  const { user } = useAuth();
+
+  const handleBooking = () => {
+    bookTour(tourId);
+  };
+
   return (
     <section className="section-cta">
       <div className="cta">
@@ -18,11 +28,22 @@ function CTASection({ image1, image2, duration }) {
         <div className="cta__content">
           <h2 className="heading-secondary">What are you waiting for?</h2>
           <p className="cta__text">
-            {duration} days. 1 adventure. Infinite memories. Make it yours today!
+            {duration} days. 1 adventure. Infinite memories. Make it yours
+            today!
           </p>
-          <button className="btn btn--green span-all-rows">
-            Book tour now!
-          </button>
+
+          {user ? (
+            <button
+              className="btn btn--green span-all-rows"
+              onClick={handleBooking}
+            >
+              Book tour now!
+            </button>
+          ) : (
+            <Link to="/login" className="btn btn--green span-all-rows">
+              Log in to book tour
+            </Link>
+          )}
         </div>
       </div>
     </section>

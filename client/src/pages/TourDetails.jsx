@@ -82,6 +82,7 @@ function TourDetails() {
         image1={tour.images[0]}
         image2={tour.images[1]}
         duration={tour.duration}
+        tourId={tour._id}
       />
     </>
   );

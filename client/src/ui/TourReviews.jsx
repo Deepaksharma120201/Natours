@@ -6,7 +6,6 @@ function TourReviews({ reviews }) {
       <div className="reviews">
         {reviews.map(
           (review, idx) => (
-            console.log(review),
             (
               <ReviewCard
                 key={idx}
