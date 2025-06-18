@@ -1,7 +1,6 @@
 import { toast } from "react-hot-toast";
 import { loadStripe } from "@stripe/stripe-js";
 
-const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 export const bookTour = async (tourId) => {
   try {
     // 1) Get checkout session from API using fetch
@@ -11,6 +10,7 @@ export const bookTour = async (tourId) => {
         credentials: "include",
       }
     );
+    const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
     const data = await res.json();
 
