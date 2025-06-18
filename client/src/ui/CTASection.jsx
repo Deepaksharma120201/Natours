@@ -1,12 +1,19 @@
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import { bookTour } from "../services/payment";
+import { useState } from "react";
 
 function CTASection({ image1, image2, duration, tourId }) {
   const { user } = useAuth();
+  const [loading, setLoading] = useState(false);
 
-  const handleBooking = () => {
-    bookTour(tourId);
+  const handleBooking = async () => {
+    setLoading(true);
+    try {
+      await bookTour(tourId);
+    } catch {
+      setLoading(false);
+    }
   };
 
   return (
@@ -36,6 +43,7 @@ function CTASection({ image1, image2, duration, tourId }) {
             <button
               className="btn btn--green span-all-rows"
               onClick={handleBooking}
+              disabled={loading}
             >
               Book tour now!
             </button>

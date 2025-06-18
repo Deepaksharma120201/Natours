@@ -3,9 +3,8 @@
   "version": "1.0.0",
   "description": "Exciting tours for adventurous people",
   "scripts": {
-    "client": "npm run dev --prefix client",
-    "server": "npm start --prefix server",
-    "dev": "concurrently \"npm run client\" \"npm run server\""
+    "dev": "concurrently \"npm run dev --prefix client\" \"nodemon server/server.js\"",
+    "build": "npm run build --prefix client"
   },
   "keywords": [],
   "author": "",

@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useSearch } from "../context/SearchContext";
 import Card from "./Card.jsx";
+import Spinner from "./Spinner.jsx";
 
 function Main() {
   const [tours, setTours] = useState([]);
   const { searchTerm } = useSearch();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTours = async () => {
@@ -15,6 +17,8 @@ function Main() {
       } catch (err) {
         console.error("Failed to fetch tours:", err);
         setTours([]);
+      } finally {
+        setLoading(false);
       }
     };
     fetchTours();
@@ -25,6 +29,8 @@ function Main() {
         tour.name.toLowerCase().includes(searchTerm.toLowerCase())
       )
     : tours;
+
+  if (loading) return <Spinner />;
 
   return (
     <main className="main">

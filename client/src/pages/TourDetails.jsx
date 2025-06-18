@@ -9,11 +9,14 @@ import TourDescription from "../ui/TourDescription";
 import TourGallery from "../ui/TourGallery";
 import TourReviews from "../ui/TourReviews";
 import CTASection from "../ui/CTASection";
+import Spinner from "../ui/Spinner";
+import { MapComponent } from "../ui/MapComponent";
 
 function TourDetails() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const [tour, setTour] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTour = async () => {
@@ -44,12 +47,14 @@ function TourDetails() {
         setTour(tour);
       } catch (err) {
         console.error("Failed to load tour:", err);
+      } finally {
+        setLoading(false);
       }
     };
     fetchTour();
   }, [navigate, slug]);
 
-  if (!tour) return <p>Loading tour details...</p>;
+  if (loading || !tour) return <Spinner />;
 
   return (
     <>
@@ -77,6 +82,9 @@ function TourDetails() {
         />
       </section>
       <TourGallery images={tour.images} />
+      <section className="section-map">
+        <MapComponent locations={tour.locations} />
+      </section>
       <TourReviews reviews={tour.reviews} />
       <CTASection
         image1={tour.images[0]}
