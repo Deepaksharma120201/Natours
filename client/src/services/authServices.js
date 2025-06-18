@@ -32,7 +32,7 @@ export async function loginUser({ email, password }) {
 }
 
 export async function logoutUser() {
-  const res = await fetch("http://localhost:3000/logout", {
+  const res = await fetch("/logout", {
     method: "GET",
     credentials: "include",
   });
@@ -43,7 +43,7 @@ export async function logoutUser() {
 }
 
 export async function signupUser({ name, email, password, confirmPassword }) {
-  const res = await fetch("http://localhost:3000/api/v1/users/signup", {
+  const res = await fetch("/api/v1/users/signup", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

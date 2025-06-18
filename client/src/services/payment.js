@@ -5,7 +5,7 @@ export const bookTour = async (tourId) => {
   try {
     // 1) Get checkout session from API using fetch
     const res = await fetch(
-      `http://localhost:3000/api/v1/booking/checkout-session/${tourId}`,
+      `/api/v1/booking/checkout-session/${tourId}`,
       {
         credentials: "include",
       }

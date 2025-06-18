@@ -1,5 +1,5 @@
 export async function updateUserData(formData) {
-  const res = await fetch("http://localhost:3000/api/v1/users/updateMe", {
+  const res = await fetch("/api/v1/users/updateMe", {
     method: "PATCH",
     credentials: "include",
     body: formData,
@@ -20,7 +20,7 @@ export async function updatePassword({
   confirmPassword,
 }) {
   const res = await fetch(
-    "http://localhost:3000/api/v1/users/updateMyPassword",
+    "/api/v1/users/updateMyPassword",
     {
       method: "PATCH",
       headers: {

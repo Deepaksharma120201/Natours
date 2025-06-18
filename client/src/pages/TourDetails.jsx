@@ -21,7 +21,7 @@ function TourDetails() {
   useEffect(() => {
     const fetchTour = async () => {
       try {
-        const res = await fetch(`http://localhost:3000/tour/${slug}`, {
+        const res = await fetch(`/tour/${slug}`, {
           method: "GET",
           credentials: "include",
         });
