@@ -1,26 +1,21 @@
 import { useEffect } from "react";
 import { useState } from "react";
+import { fetchMyBookings } from "../services/apiServices.js";
 import Spinner from "../ui/Spinner.jsx";
+import Card from "../ui/Card.jsx";
 
 function MyBookings() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchTours = async () => {
-      try {
-        const res = await fetch("/api/v1/my-bookings");
-        const data = await res.json();
-        const bookings = data?.data?.doc ?? [];
-        setBookings(bookings);
-      } catch (err) {
-        console.error("Failed to fetch tours:", err);
-        setBookings([]);
-      } finally {
-        setLoading(false);
-      }
+    const loadBookings = async () => {
+      const bookedTours = await fetchMyBookings();
+      setBookings(bookedTours);
+      setLoading(false);
     };
-    fetchTours();
+
+    loadBookings();
   }, []);
 
   if (loading) return <Spinner />;

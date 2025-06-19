@@ -12,7 +12,6 @@ const hpp = require("hpp");
 // Import your routers and controllers
 const AppError = require("./utils/appError");
 const tourRouter = require("./routes/tourRoutes");
-const mainRouter = require("./routes/mainRoutes");
 const globalErrorHandler = require("./controllers/errorController");
 const bookingController = require("./controllers/bookingController");
 const userRouter = require("./routes/userRoutes");
@@ -95,7 +94,6 @@ app.use(
 );
 
 // --- ROUTES ---
-app.use("/", mainRouter);
 app.use("/api/v1/tours", tourRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/reviews", reviewRouter);

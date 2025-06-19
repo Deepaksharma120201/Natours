@@ -4,7 +4,7 @@ const path = require("path");
 const Tour = require("./../models/tourModel");
 const catchAsync = require("./../utils/catchAsync");
 const factory = require("./handlerFactory");
-
+const Booking = require("../models/bookingModel");
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) => {
@@ -66,6 +66,35 @@ exports.aliasTopTours = (req, res, next) => {
   req.query.fields = "name,price,ratingsAverage,summary,difficulty";
   next();
 };
+
+exports.getMyTours = catchAsync(async (req, res, next) => {
+  const bookings = await Booking.find({ user: req.user.id });
+  const tourIDs = bookings.map((el) => el.tour);
+  const tours = await Tour.find({ _id: { $in: tourIDs } });
+  
+  res.status(200).json({
+    status: "success",
+    results: bookings.length,
+    data: {
+      tours,
+    },
+  });
+});
+
+exports.getTourBySlug = factory.getOneBySlug(Tour, [
+  {
+    path: "guides",
+    select: "name role photo",
+  },
+  {
+    path: "reviews",
+    select: "review rating user createdAt",
+    populate: {
+      path: "user",
+      select: "name photo",
+    },
+  },
+]);
 
 exports.getAllTour = factory.getAll(Tour);
 exports.getTour = factory.getOne(Tour, { path: "reviews" });

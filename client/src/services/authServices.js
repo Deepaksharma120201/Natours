@@ -1,5 +1,5 @@
 export async function fetchCurrentUser() {
-  const res = await fetch("http://localhost:3000/currentUser", {
+  const res = await fetch("/api/v1/users/currentUser", {
     credentials: "include",
   });
 
@@ -13,7 +13,7 @@ export async function fetchCurrentUser() {
 }
 
 export async function loginUser({ email, password }) {
-  const res = await fetch("http://localhost:3000/api/v1/users/login", {
+  const res = await fetch("/api/v1/users/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -29,17 +29,6 @@ export async function loginUser({ email, password }) {
   }
 
   return data;
-}
-
-export async function logoutUser() {
-  const res = await fetch("/logout", {
-    method: "GET",
-    credentials: "include",
-  });
-
-  if (!res.ok) {
-    throw new Error("Logout failed");
-  }
 }
 
 export async function signupUser({ name, email, password, confirmPassword }) {
@@ -58,5 +47,16 @@ export async function signupUser({ name, email, password, confirmPassword }) {
     throw new Error(data.message || "Signup failed");
   } else {
     return data;
+  }
+}
+
+export async function logoutUser() {
+  const res = await fetch("/api/v1/users/logout", {
+    method: "GET",
+    credentials: "include",
+  });
+  
+  if (!res.ok) {
+    throw new Error("Logout failed");
   }
 }

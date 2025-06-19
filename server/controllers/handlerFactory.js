@@ -53,6 +53,23 @@ exports.getOne = (Model, popOptions) =>
     });
   });
 
+exports.getOneBySlug = (Model, popOptions) =>
+  catchAsync(async (req, res, next) => {
+    let query = Model.findOne({ slug: req.params.slug });
+    if (popOptions) query = query.populate(popOptions);
+
+    const tour = await query;
+
+    if (!tour) {
+      return next(new AppError("No tour found with that slug", 404));
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: { tour },
+    });
+  });
+
 exports.getAll = (Model) =>
   catchAsync(async (req, res, next) => {
     // To allow nested GET reviews on tour

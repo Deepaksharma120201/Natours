@@ -6,7 +6,7 @@
       "use": "@vercel/node"
     },
     {
-      "src": "client/vite.config.js",
+      "src": "client/package.json",
       "use": "@vercel/static-build",
       "config": {
         "distDir": "dist"
@@ -19,8 +19,12 @@
       "destination": "/server/app.js"
     },
     {
-      "source": "/((?!api/).*)",
-      "destination": "/client/index.html"
+      "source": "/currentUser",
+      "destination": "/server/app.js"
+    },
+    {
+      "source": "/((?!api/|assets/|img/|currentUser).*)",
+      "destination": "/index.html"
     }
   ]
 }

@@ -4,9 +4,9 @@ dotenv.config({ path: `${__dirname}/.env` });
 
 const app = require("./app");
 
-mongoose
-  .connect(process.env.DATABASE_LOCAL)
-  .then((res) => console.log("DB connection successful."));
+mongoose.connect(process.env.DATABASE_URL).then((res) => {
+  console.log("DB connection successful.");
+});
 
 const port = 3000;
 const server = app.listen(port, () => {

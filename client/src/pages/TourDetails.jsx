@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { MapComponent } from "../ui/MapComponent";
 
 import TourHero from "../ui/TourHero";
 import QuickFacts from "../ui/QuickFacts";
@@ -10,7 +11,6 @@ import TourGallery from "../ui/TourGallery";
 import TourReviews from "../ui/TourReviews";
 import CTASection from "../ui/CTASection";
 import Spinner from "../ui/Spinner";
-import { MapComponent } from "../ui/MapComponent";
 
 function TourDetails() {
   const { slug } = useParams();
@@ -21,7 +21,7 @@ function TourDetails() {
   useEffect(() => {
     const fetchTour = async () => {
       try {
-        const res = await fetch(`/tour/${slug}`, {
+        const res = await fetch(`/api/v1/tours/slug/${slug}`, {
           method: "GET",
           credentials: "include",
         });
