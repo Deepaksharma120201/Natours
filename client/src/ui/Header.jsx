@@ -14,8 +14,8 @@ function Header() {
   const handleLogout = async () => {
     try {
       await logoutUser();
-      navigate("/");
       setUser(null);
+      setTimeout(() => navigate("/", { replace: true }), 100);
       toast.success("Logged out successfully!");
     } catch (err) {
       toast.error(err.message);

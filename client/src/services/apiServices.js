@@ -9,6 +9,29 @@ export async function fetchTours() {
   }
 }
 
+export async function fetchTourBySlug(slug) {
+  const res = await fetch(`/api/v1/tours/slug/${slug}`, {
+    method: "GET",
+    credentials: "include",
+  });
+
+  if (res.status === 404) {
+    const errorData = await res.json();
+    throw { code: 404, message: errorData.message || "Page not found!" };
+  }
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw {
+      code: res.status,
+      message: errorData.message || "Something went wrong.",
+    };
+  }
+
+  const data = await res.json();
+  return data?.data?.tour ?? [];
+}
+
 export async function fetchMyBookings() {
   try {
     const res = await fetch("/api/v1/tours/my-bookings", {

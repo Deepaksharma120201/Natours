@@ -44,6 +44,11 @@ export async function signupUser({ name, email, password, confirmPassword }) {
   const data = await res.json();
 
   if (!res.ok) {
+    if (data?.error?.errors) {
+      const firstError = Object.values(data.error.errors)[0];
+      throw new Error(firstError.message || "Signup failed");
+    }
+
     throw new Error(data.message || "Signup failed");
   } else {
     return data;
@@ -55,7 +60,7 @@ export async function logoutUser() {
     method: "GET",
     credentials: "include",
   });
-  
+
   if (!res.ok) {
     throw new Error("Logout failed");
   }

@@ -37,8 +37,8 @@ const userSchema = new mongoose.Schema({
       validator: function (el) {
         return el === this.password;
       },
+      message: "Password and Confirm password are not same!",
     },
-    message: "Password and Confirm password are not same!",
   },
   passwordChangedAt: Date,
   passwordResetToken: String,
@@ -50,25 +50,25 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-// userSchema.pre("save", async function (next) {
-//   if (!this.isModified("password")) return next();
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
 
-//   this.password = await bcrypt.hash(this.password, 12);
-//   this.confirmPassword = undefined;
-//   next();
-// });
+  this.password = await bcrypt.hash(this.password, 12);
+  this.confirmPassword = undefined;
+  next();
+});
 
-// userSchema.pre("save", function (next) {
-//   if (!this.isModified("password") || this.isNew) return next();
+userSchema.pre("save", function (next) {
+  if (!this.isModified("password") || this.isNew) return next();
 
-//   this.passwordChangedAt = Date.now() - 1000;
-//   next();
-// });
+  this.passwordChangedAt = Date.now() - 1000;
+  next();
+});
 
-// userSchema.pre(/^find/, function (next) {
-//   this.find({ active: { $ne: false } });
-//   next();
-// });
+userSchema.pre(/^find/, function (next) {
+  this.find({ active: { $ne: false } });
+  next();
+});
 
 userSchema.methods.correctPassword = async function (
   candidatePassword,

@@ -9,6 +9,7 @@ export const bookTour = async (tourId) => {
     const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
     const data = await res.json();
+    window.location.replace(data.session.url);
 
     if (!res.ok)
       throw new Error(data.message || "Failed to get checkout session");

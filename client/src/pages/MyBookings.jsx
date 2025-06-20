@@ -13,6 +13,7 @@ function MyBookings() {
       const bookedTours = await fetchMyBookings();
       setBookings(bookedTours);
       setLoading(false);
+      document.title = "Wildway | My Bookings";
     };
 
     loadBookings();

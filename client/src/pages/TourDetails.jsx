@@ -11,6 +11,7 @@ import TourGallery from "../ui/TourGallery";
 import TourReviews from "../ui/TourReviews";
 import CTASection from "../ui/CTASection";
 import Spinner from "../ui/Spinner";
+import { fetchTourBySlug } from "../services/apiServices";
 
 function TourDetails() {
   const { slug } = useParams();
@@ -19,39 +20,21 @@ function TourDetails() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchTour = async () => {
+    const loadTour = async () => {
       try {
-        const res = await fetch(`/api/v1/tours/slug/${slug}`, {
-          method: "GET",
-          credentials: "include",
-        });
-
-        if (res.status === 404) {
-          const errorData = await res.json();
-          navigate("/not-found", {
-            state: { message: errorData.message || "Page not found!" },
-          });
-          return;
+        const tourData = await fetchTourBySlug(slug);
+        setTour(tourData);
+        if (tourData?.name) {
+          document.title = `Wildway | ${tourData.name}`;
         }
-
-        if (!res.ok) {
-          const errorData = await res.json();
-          navigate("/not-found", {
-            state: { message: errorData.message || "Something went wrong." },
-          });
-          return;
-        }
-
-        const data = await res.json();
-        const tour = data?.data?.tour ?? [];
-        setTour(tour);
       } catch (err) {
         console.error("Failed to load tour:", err);
+        navigate("/not-found", { state: { message: err.message } });
       } finally {
         setLoading(false);
       }
     };
-    fetchTour();
+    loadTour();
   }, [navigate, slug]);
 
   if (loading || !tour) return <Spinner />;

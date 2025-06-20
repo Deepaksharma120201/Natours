@@ -3,9 +3,16 @@ import AccountSettingsForm from "../ui/AccountSettingsForm";
 import PasswordChangeForm from "../ui/PasswordChangeForm";
 import { useAuth } from "../context/AuthContext";
 import { Navigate } from "react-router-dom";
+import { useEffect } from "react";
 
 function UserAccount() {
   const { user } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      document.title = `Wildway | ${user.name}`;
+    }
+  }, [user]);
 
   if (!user) {
     return (
