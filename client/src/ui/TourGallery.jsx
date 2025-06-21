@@ -5,7 +5,7 @@ function TourGallery({ images }) {
         <div key={i} className="picture-box">
           <img
             className={`picture-box__img picture-box__img--${i + 1}`}
-            src={`/img/tours/${src}`}
+            src={src}
             alt={`Tour ${i + 1}`}
           />
         </div>

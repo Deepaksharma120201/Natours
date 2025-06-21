@@ -3,7 +3,7 @@ function TourHero({ image, title, duration, description }) {
     <section className="section-header">
       <div className="header__hero">
         <div className="header__hero-overlay">&nbsp;</div>
-        <img className="header__hero-img" src={`/img/tours/${image}`} alt={title} />
+        <img className="header__hero-img" src={image} alt={title} />
       </div>
       <div className="heading-box">
         <h1 className="heading-primary">

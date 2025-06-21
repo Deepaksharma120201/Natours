@@ -1,15 +1,17 @@
 import { useState } from "react";
 import { updatePassword } from "../services/updateData";
 import toast from "react-hot-toast";
+import Spinner from "./Spinner";
 
 function PasswordChangeForm() {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     try {
       await updatePassword({
         currentPassword,
@@ -22,8 +24,12 @@ function PasswordChangeForm() {
       setConfirmPassword("");
     } catch (err) {
       toast.error(err.message || "Failed to update password.");
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) return <Spinner />;
 
   return (
     <form className="form form-user-settings" onSubmit={handlePasswordChange}>

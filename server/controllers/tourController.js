@@ -1,11 +1,12 @@
 const multer = require("multer");
 const sharp = require("sharp");
-const path = require("path");
 const Tour = require("./../models/tourModel");
 const catchAsync = require("./../utils/catchAsync");
 const factory = require("./handlerFactory");
 const Booking = require("../models/bookingModel");
 const multerStorage = multer.memoryStorage();
+const cloudinary = require("../utils/cloudinary");
+const streamifier = require("streamifier");
 
 const multerFilter = (req, file, cb) => {
   if (file.mimetype.startsWith("image")) {
@@ -25,35 +26,44 @@ exports.uploadTourImages = upload.fields([
   { name: "images", maxCount: 3 },
 ]);
 
+const uploadToCloudinary = (fileBuffer, folder, filename) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder,
+        public_id: filename,
+        format: "jpeg",
+        transformation: [{ width: 2000, height: 1333, crop: "limit" }],
+      },
+      (error, result) => {
+        if (error) return reject(error);
+        resolve(result.secure_url); // return URL
+      }
+    );
+
+    streamifier.createReadStream(fileBuffer).pipe(stream);
+  });
+};
+
+// 6. Replace local resizing with Cloudinary upload
 exports.resizeTourImages = catchAsync(async (req, res, next) => {
   if (!req.files.imageCover || !req.files.images) return next();
 
-  // 1) Cover image
-  req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpeg`;
-  await sharp(req.files.imageCover[0].buffer)
-    .resize(2000, 1333)
-    .toFormat("jpeg")
-    .jpeg({ quality: 90 })
-    .toFile(
-      path.join(__dirname, "../../client/public/img/tours", req.body.imageCover)
-    );
+  // Cover Image
+  const timestamp = Date.now();
+  const coverFilename = `tour-${req.params.id}-${timestamp}-cover`;
+  const coverUrl = await uploadToCloudinary(
+    req.files.imageCover[0].buffer,
+    "Wildway/tours",
+    coverFilename
+  );
+  req.body.imageCover = coverUrl;
 
-  // 2) Images
-  req.body.images = [];
-
-  await Promise.all(
+  // Other Images
+  req.body.images = await Promise.all(
     req.files.images.map(async (file, i) => {
-      const filename = `tour-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
-
-      await sharp(file.buffer)
-        .resize(2000, 1333)
-        .toFormat("jpeg")
-        .jpeg({ quality: 90 })
-        .toFile(
-          path.join(__dirname, "../../client/public/img/tours", filename)
-        );
-
-      req.body.images.push(filename);
+      const filename = `tour-${req.params.id}-${timestamp}-${i + 1}`;
+      return await uploadToCloudinary(file.buffer, "Wildway/tours", filename);
     })
   );
 
@@ -71,7 +81,7 @@ exports.getMyTours = catchAsync(async (req, res, next) => {
   const bookings = await Booking.find({ user: req.user.id });
   const tourIDs = bookings.map((el) => el.tour);
   const tours = await Tour.find({ _id: { $in: tourIDs } });
-  
+
   res.status(200).json({
     status: "success",
     results: bookings.length,

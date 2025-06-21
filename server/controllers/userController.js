@@ -1,11 +1,10 @@
 const multer = require("multer");
-const sharp = require("sharp");
-const path = require("path");
 const User = require("./../models/userModel");
 const catchAsync = require("./../utils/catchAsync");
 const AppError = require("../utils/appError");
 const factory = require("./handlerFactory");
-
+const cloudinary = require("../utils/cloudinary");
+const streamifier = require("streamifier");
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) => {
@@ -23,18 +22,38 @@ const upload = multer({
 
 exports.uploadUserPhoto = upload.single("photo");
 
+const uploadToCloudinary = (buffer, folder, filename) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder,
+        public_id: filename,
+        format: "jpeg",
+        transformation: [{ width: 500, height: 500, crop: "fill" }],
+      },
+      (error, result) => {
+        if (error) return reject(error);
+        resolve(result.secure_url);
+      }
+    );
+    streamifier.createReadStream(buffer).pipe(stream);
+  });
+};
+
 exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
 
-  req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
+  const timestamp = Date.now();
+  const filename = `user-${req.user.id}-${timestamp}`;
+  console.log("The filename is: " + filename);
 
-  await sharp(req.file.buffer)
-    .resize(500, 500)
-    .toFormat("jpeg")
-    .jpeg({ quality: 90 })
-    .toFile(
-      path.join(__dirname, "../../client/public/img/users", req.file.filename)
-    );
+  const cloudinaryUrl = await uploadToCloudinary(
+    req.file.buffer,
+    "Wildway/users",
+    filename
+  );
+
+  req.body.photo = cloudinaryUrl;
 
   next();
 });
@@ -53,9 +72,6 @@ exports.getMe = (req, res, next) => {
 };
 
 exports.updateMe = catchAsync(async (req, res, next) => {
-  console.log(req.file);
-  console.log(req.body);
-
   // Create error if user POSTs password data
   if (req.body.password || req.body.passwordConfirm) {
     return next(
@@ -65,9 +81,10 @@ exports.updateMe = catchAsync(async (req, res, next) => {
       )
     );
   }
+
   // Filtered out unwanted fields names that are not allowed to be updated
-  const filteredBody = filterObj(req.body, "name", "email");
-  if (req.file) filteredBody.photo = req.file.filename;
+  const filteredBody = filterObj(req.body, "name", "email", "photo");
+  if (req.file) filteredBody.photo = req.body.photo;
 
   // Update user document
   const user = await User.findByIdAndUpdate(req.user.id, filteredBody, {

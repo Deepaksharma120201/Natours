@@ -1,14 +1,17 @@
 import { useState } from "react";
 import { updateUserData } from "../services/updateData";
 import toast from "react-hot-toast";
+import Spinner from "./Spinner";
 
 function AccountSettingsForm({ user }) {
   const [name, setName] = useState(user.name || "");
   const [email, setEmail] = useState(user.email || "");
   const [photo, setPhoto] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("name", name);
@@ -20,8 +23,12 @@ function AccountSettingsForm({ user }) {
     } catch (err) {
       console.log(err);
       toast.error(err.message.split(":")[2] || "Failed to update profile.");
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) return <Spinner />;
 
   return (
     <form className="form form-user-data" onSubmit={handleSubmit}>
@@ -52,11 +59,7 @@ function AccountSettingsForm({ user }) {
         />
       </div>
       <div className="form__group form__photo-upload">
-        <img
-          className="form__user-photo"
-          src={`/img/users/${user.photo}`}
-          alt="User photo"
-        />
+        <img className="form__user-photo" src={user.photo} alt="User photo" />
         <input
           className="form__upload"
           type="file"

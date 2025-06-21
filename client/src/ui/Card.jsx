@@ -23,7 +23,6 @@ function Card({ tour }) {
     ? new Date(startDates[0]).toLocaleDateString()
     : "TBD";
   const stops = locations?.length || 0;
-  const image = `/img/tours/${imageCover}`;
   const link = `/tour/${slug}`;
 
   return (
@@ -31,7 +30,7 @@ function Card({ tour }) {
       <div className="card__header">
         <div className="card__picture">
           <div className="card__picture-overlay">&nbsp;</div>
-          <img src={image} alt={name} className="card__picture-img" />
+          <img src={imageCover} alt={name} className="card__picture-img" />
         </div>
         <h3 className="heading-tertirary">
           <span>{name}</span>

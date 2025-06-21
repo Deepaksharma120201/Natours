@@ -54,7 +54,7 @@ function Header() {
             </button>
             <Link to="/me" className="nav__el">
               <img
-                src={`/img/users/${user.photo}`}
+                src={user.photo}
                 alt="User photo"
                 className="nav__user-img"
               />
