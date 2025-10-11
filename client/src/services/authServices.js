@@ -55,6 +55,25 @@ export async function signupUser({ name, email, password, confirmPassword }) {
   }
 }
 
+export async function forgotPassword({ email }) {
+  const res = await fetch("/api/v1/users/forgotPassword", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  });
+
+  const data = await res.json();
+  console.log(data);
+
+  if (!res.ok) {
+    throw new Error(data.message || "Something went wrong!!");
+  }
+
+  return data;
+}
+
 export async function logoutUser() {
   const res = await fetch("/api/v1/users/logout", {
     method: "GET",

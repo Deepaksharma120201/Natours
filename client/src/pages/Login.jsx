@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { fetchCurrentUser, loginUser } from "../services/authServices";
 import { useAuth } from "../context/AuthContext";
 
@@ -57,8 +57,13 @@ function Login() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <div className="form__group">
-              <button className="btn btn--green">Login</button>
+            <div className="form__actions">
+              <button className="btn btn--green" type="submit">
+                Login
+              </button>
+              <Link to="/forgot-password" className="btn-text forgot-password">
+                Forgot Password?
+              </Link>
             </div>
           </form>
         </div>

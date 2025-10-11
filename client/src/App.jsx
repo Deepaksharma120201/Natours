@@ -10,6 +10,7 @@ import MainLayout from "./ui/Layout";
 import UserAccount from "./pages/UserAccount";
 import Signup from "./pages/Signup";
 import MyBookings from "./pages/MyBookings";
+import ForgotPassword from "./pages/ForgotPassword";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
               <Route path="/tour/:slug" element={<TourDetails />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/me" element={<UserAccount />} />
               <Route path="/my-bookings" element={<MyBookings />} />
               <Route path="/not-found" element={<PageNotFound />} />
