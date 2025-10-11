@@ -4,11 +4,12 @@ dotenv.config({ path: `${__dirname}/.env` });
 
 const app = require("./app");
 
-mongoose.connect(process.env.DATABASE_URL).then((res) => {
-  console.log("DB connection successful.");
-});
+mongoose
+  .connect(process.env.DATABASE_URL)
+  .then(() => console.log("DB connection successful."))
+  .catch((err) => console.error("DB connection error:", err));
 
-const port =  process.env.FRONTEND_URL || 3000;
+const port = process.env.PORT || 3000;
 const server = app.listen(port, () => {
   console.log(`App running on port ${port}...`);
 });
