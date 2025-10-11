@@ -42,6 +42,15 @@ app.post(
   bookingController.webhookCheckout
 );
 
+// CSP Middleware
+app.use((req, res, next) => {
+  res.setHeader(
+    "Content-Security-Policy",
+    "img-src 'self' data: https://res.cloudinary.com;"
+  );
+  next();
+});
+
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: "10kb" }));
 app.use(cookieParser());
